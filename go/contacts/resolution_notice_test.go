@@ -26,7 +26,11 @@ func TestEncryptContactResolutionForServer(t *testing.T) {
 	enc, err := encryptContactBlob(tc.MetaContext(), contact)
 	require.NoError(t, err)
 
+	// TODO: roll PUK forward
+
 	dec, err := DecryptContactBlob(tc.MetaContext(), enc)
 	require.NoError(t, err)
 	require.Equal(t, contact, dec)
 }
+
+// TODO: add a multiple user test
