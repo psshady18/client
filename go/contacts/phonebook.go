@@ -108,7 +108,7 @@ func ResolveAndSaveContacts(mctx libkb.MetaContext, provider ContactsProvider, c
 				},
 			}
 		}
-		err = SendContactResolutionToServer(mctx, resolutionsForPeoplePage)
+		err = SendEncryptedContactResolutionToServer(mctx, resolutionsForPeoplePage)
 		if err != nil {
 			mctx.Warning("Could not add resolved contacts to people page: %v"+
 				"; returning contacts anyway", err)
