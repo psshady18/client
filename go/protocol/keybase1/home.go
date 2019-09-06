@@ -622,20 +622,15 @@ type HomeScreenPeopleNotificationContact struct {
 	ResolveTime         Time   `codec:"resolveTime" json:"resolveTime"`
 	Username            string `codec:"username" json:"username"`
 	Description         string `codec:"description" json:"description"`
-	ResolvedContactBlob []byte `codec:"resolvedContactBlob" json:"resolvedContactBlob"`
+	ResolvedContactBlob string `codec:"resolvedContactBlob" json:"resolvedContactBlob"`
 }
 
 func (o HomeScreenPeopleNotificationContact) DeepCopy() HomeScreenPeopleNotificationContact {
 	return HomeScreenPeopleNotificationContact{
-		ResolveTime: o.ResolveTime.DeepCopy(),
-		Username:    o.Username,
-		Description: o.Description,
-		ResolvedContactBlob: (func(x []byte) []byte {
-			if x == nil {
-				return nil
-			}
-			return append([]byte{}, x...)
-		})(o.ResolvedContactBlob),
+		ResolveTime:         o.ResolveTime.DeepCopy(),
+		Username:            o.Username,
+		Description:         o.Description,
+		ResolvedContactBlob: o.ResolvedContactBlob,
 	}
 }
 

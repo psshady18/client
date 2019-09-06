@@ -300,7 +300,7 @@
           "name": "description"
         },
         {
-          "type": "bytes",
+          "type": "string",
           "name": "resolvedContactBlob"
         }
       ]

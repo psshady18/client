@@ -126,7 +126,7 @@ protocol home {
     Time resolveTime;
     string username;
     string description;
-    bytes resolvedContactBlob;
+    string resolvedContactBlob;
   }
 
   record HomeScreenPeopleNotificationContactMulti {

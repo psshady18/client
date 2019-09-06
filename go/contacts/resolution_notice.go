@@ -4,10 +4,9 @@ import (
 	"context"
 	"encoding/base64"
 	"errors"
-	"github.com/keybase/keybase/go/base/codec"
-
 	"github.com/keybase/client/go/encrypteddb"
 	"github.com/keybase/client/go/libkb"
+	"github.com/keybase/client/go/msgpack"
 	"github.com/keybase/client/go/protocol/keybase1"
 )
 
@@ -18,7 +17,7 @@ type ContactResolution struct {
 
 const ContactResolutionEncryptionVersion = 1
 
-type ContactResolutionForEncryptrion struct {
+type ContactResolutionForEncryption struct {
 	ContactResolution
 	EncryptionVersion int
 }
@@ -31,7 +30,7 @@ type EncryptedContactResolution struct {
 var errWrongContactEncryptionScheme = errors.New(
 	"wrong encryption version for encrypted contact blob")
 
-func getKeyFn(mctx libkb.MetaContext,
+func getPerUserKeyFn(mctx libkb.MetaContext,
 	pukGen *keybase1.PerUserKeyGeneration) (keyFn func(ctx context.
 	Context) ([32]byte, error), gen keybase1.PerUserKeyGeneration,
 	errOuter error) {
@@ -64,11 +63,11 @@ func getKeyFn(mctx libkb.MetaContext,
 
 func encryptContactBlob(mctx libkb.MetaContext, res ContactResolution) (string,
 	error) {
-	keyFn, gen, err := getKeyFn(mctx, nil)
+	keyFn, gen, err := getPerUserKeyFn(mctx, nil)
 	if err != nil {
 		return "", err
 	}
-	boxedRes := ContactResolutionForEncryptrion{res, ContactResolutionEncryptionVersion}
+	boxedRes := ContactResolutionForEncryption{res, ContactResolutionEncryptionVersion}
 	encrypted, err := encrypteddb.EncodeBox(mctx.Ctx(), boxedRes, keyFn)
 	if err != nil {
 		return "", err
@@ -77,7 +76,7 @@ func encryptContactBlob(mctx libkb.MetaContext, res ContactResolution) (string,
 		Blob:          encrypted,
 		PukGeneration: gen,
 	}
-	messagePacked, err := codec.MessagePackEncode(result)
+	messagePacked, err := msgpack.Encode(result)
 	if err != nil {
 		return "", err
 	}
@@ -91,15 +90,15 @@ func DecryptContactBlob(mctx libkb.MetaContext,
 		return res, err
 	}
 	var unpacked EncryptedContactResolution
-	err = codec.MessagePackDecode(messagePacked, &unpacked)
+	err = msgpack.Decode(&unpacked, messagePacked)
 	if err != nil {
 		return res, err
 	}
-	keyFn, _, err := getKeyFn(mctx, &unpacked.PukGeneration)
+	keyFn, _, err := getPerUserKeyFn(mctx, &unpacked.PukGeneration)
 	if err != nil {
 		return res, err
 	}
-	var boxedRes ContactResolutionForEncryptrion
+	var boxedRes ContactResolutionForEncryption
 	err = encrypteddb.DecodeBox(mctx.Ctx(), unpacked.Blob,
 		keyFn, &boxedRes)
 	if err != nil {
@@ -111,12 +110,11 @@ func DecryptContactBlob(mctx libkb.MetaContext,
 	return boxedRes.ContactResolution, nil
 }
 
-// TODO: actually call this
-func SendContactResolutionToServer(mctx libkb.MetaContext,
+func SendEncryptedContactResolutionToServer(mctx libkb.MetaContext,
 	resolutions []ContactResolution) error {
 
 	type resolvedArg struct {
-		ResolvedContactBlobBase64 string `json:"b"`
+		ResolvedContactBlobBase64 string `json:"blob"`
 	}
 
 	type resolvedRes struct {

@@ -63,7 +63,8 @@ func decodeContactNotifications(mctx libkb.MetaContext, home keybase1.
 	for i, item := range items {
 		t, err := item.Data.T()
 		if err != nil {
-			mctx.Warning("Could not determine home screen item type: %v", item)
+			mctx.Warning("Could not determine home screen item type %v: %v",
+				item, err)
 			continue
 		}
 		if t == keybase1.HomeScreenItemType_PEOPLE {
@@ -71,27 +72,43 @@ func decodeContactNotifications(mctx libkb.MetaContext, home keybase1.
 			innerT, err := peopleItem.T()
 			if err != nil {
 				mctx.Warning(
-					"Could not determine home screen inner item type: %v",
-					item)
+					"Could not determine home screen inner item type %v: %v",
+					item, err)
 				continue
 			}
 			if innerT == keybase1.HomeScreenPeopleNotificationType_CONTACT {
-				// TODO: consider making multicontacts
 				contact := peopleItem.Contact()
-				decryptedContact, err := contacts.DecryptContactBlob(mctx,
+				decryptedContact,
+					err := contacts.DecryptContactBlob(mctx,
 					contact.ResolvedContactBlob)
 				if err != nil {
 					return home, err
 				}
 
-				// TODO: this can't be the right way to do this
-				item.Data.People__.Contact__.Username = decryptedContact.
-					ResolvedUser.Username
-				item.Data.People__.Contact__.Description = decryptedContact.
-					Description
+				contact.Username = decryptedContact.ResolvedUser.Username
+				contact.Description = decryptedContact.Description
+				item.Data = keybase1.NewHomeScreenItemDataWithPeople(
+					keybase1.NewHomeScreenPeopleNotificationWithContact(contact))
+				items[i] = item
+			} else if innerT == keybase1.HomeScreenPeopleNotificationType_CONTACT_MULTI {
+				contactMulti := peopleItem.ContactMulti()
+				contactList := contactMulti.Contacts
+				for i, contact := range contactList {
+					decryptedContact,
+						err := contacts.DecryptContactBlob(mctx,
+						contact.ResolvedContactBlob)
+					if err != nil {
+						return home, err
+					}
+
+					contactList[i].Username = decryptedContact.ResolvedUser.Username
+					contactList[i].Description = decryptedContact.Description
+				}
+				item.Data = keybase1.NewHomeScreenItemDataWithPeople(
+					keybase1.NewHomeScreenPeopleNotificationWithContactMulti(
+						contactMulti))
 				items[i] = item
 			}
-
 		}
 	}
 
