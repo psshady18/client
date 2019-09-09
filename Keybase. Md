@@ -1,0 +1,67 @@
+### Keybase proof
+
+I hereby claim:
+
+  * I am psshady18 on github.
+  * I am psshady18 (https://keybase.io/psshady18) on keybase.
+  * I have a public key ASDkpSVElUfs7K71N-iRiQodcQvfpIs3XtyGZnt1dH0B9wo
+
+To claim this, I am signing this object:
+
+```json
+{
+  "body": {
+    "key": {
+      "eldest_kid": "0120e4a525449547ececaef537e891890a1d710bdfa48b375edc86667b75747d01f70a",
+      "host": "keybase.io",
+      "kid": "0120e4a525449547ececaef537e891890a1d710bdfa48b375edc86667b75747d01f70a",
+      "uid": "df37b63fd7c8c7d1166c54bf6357b719",
+      "username": "psshady18"
+    },
+    "merkle_root": {
+      "ctime": 1568053875,
+      "hash": "1793ddfad87db16b7298f400819fc87f903d4f6d716f171048631fe94758a6b99529a480c57c378212820752515ec773a6559f7d8460629b00566be2049294fd",
+      "hash_meta": "6078e0b1c5b907c7446b232a121aea0e3a0eba27c8986c0b2f5023bbd1e32b42",
+      "seqno": 6227353
+    },
+    "service": {
+      "entropy": "wgPpU4gUvFvha0bp4v6L9lXC",
+      "name": "github",
+      "username": "psshady18"
+    },
+    "type": "web_service_binding",
+    "version": 2
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "4.4.0"
+  },
+  "ctime": 1568053883,
+  "expire_in": 504576000,
+  "prev": "cb0e972677e7c5b3f0d27a6e1840eac9807148416a622588b2b77c57c65f9b85",
+  "seqno": 5,
+  "tag": "signature"
+}
+```
+
+with the key [ASDkpSVElUfs7K71N-iRiQodcQvfpIs3XtyGZnt1dH0B9wo](https://keybase.io/psshady18), yielding the signature:
+
+```
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEg5KUlRJVH7Oyu9TfokYkKHXEL36SLN17chmZ7dXR9AfcKp3BheWxvYWTESpcCBcQgyw6XJnfnxbPw0npuGEDqyYBxSEFqYiWIsrd8V8Zfm4XEILpJ2V3J/uraljq0vUNictpZLttwvqkxGK4be2fRIGJwAgHCo3NpZ8RAeERSvatrjVkHf6OlKpDSWEO4lgqcP7dB6D71ttb1rO3JaOmPosuUplFojQTb0O2qc7k+S5MKRtnedPdtB5ToBKhzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIIi/rYsIy/w+v5ndvj5IjWIaCs385nJ3XfAJTF/HO/TLo3RhZ80CAqd2ZXJzaW9uAQ==
+
+```
+
+And finally, I am proving ownership of the github account by posting this as a gist.
+
+### My publicly-auditable identity:
+
+https://keybase.io/psshady18
+
+### From the command line:
+
+Consider the [keybase command line program](https://keybase.io/download).
+
+```bash
+# look me up
+keybase id psshady18
+```
